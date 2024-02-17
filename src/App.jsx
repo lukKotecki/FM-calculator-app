@@ -11,14 +11,15 @@ function App() {
   const [theme, setTheme ] = React.useState('dark')
   const switchTheme = (newTheme) => setTheme(newTheme)
 
+
   console.log(theme)
 
   return (
     <ThemeSelectorContext.Provider value={{themeName:'dark', setTheme}}>
       <main className='main-container'>
         <Header />
+        to jest tekst
         <Display />
-      to jest tekst
       </main>
     </ThemeSelectorContext.Provider>
   )

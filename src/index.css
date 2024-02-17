@@ -31,3 +31,16 @@ header{
   /* width: 95%; */
   background-color: rebeccapurple;
 }
+
+.display{
+  background-color: red;
+  padding: 1em;
+  color:white;
+}
+.output{
+  padding: .5em;
+  background-color: blue;
+  font-size: 2rem;
+  color: pink;
+  text-align: center;
+}

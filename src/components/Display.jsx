@@ -6,7 +6,9 @@ export default function Display(){
 
     return(
         <div className='display'>
-            To jest WYświetlacz
+            <div className='output'>
+                345
+            </div>
         </div>
     )
 }
