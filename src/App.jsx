@@ -19,7 +19,7 @@ function App() {
       <main className='main-container'>
         <Header />
         to jest tekst
-        <Display />
+        <Display result={theme}/>
       </main>
     </ThemeSelectorContext.Provider>
   )
