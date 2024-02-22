@@ -2,11 +2,11 @@
 import React from 'react'
 
 
-export default function Keyboard({ children }){
+export default function Keyboard({ children, onClick }){
 
 
     return(
-        <div className='kayboard'>
+        <div onClick={onClick} className='kayboard'>
             {children}
         </div>
     )

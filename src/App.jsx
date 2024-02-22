@@ -14,7 +14,13 @@ function App() {
   const switchTheme = (newTheme) => setTheme(newTheme)
 
 
+
   console.log(theme)
+
+  function handleClick(e){
+    console.log(e.target.value)
+    document.documentElement.style.setProperty('--main-background-color', '#334');
+  }
 
   return (
     <ThemeSelectorContext.Provider value={{themeName:'dark', setTheme}}>
@@ -22,7 +28,7 @@ function App() {
         <Header />
 
         <Display result={theme}/>
-        <Keyboard>
+        <Keyboard onClick={handleClick}>
           <Button>7</Button>
           <Button>8</Button>
           <Button>9</Button>
