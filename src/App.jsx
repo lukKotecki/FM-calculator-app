@@ -3,23 +3,157 @@ import Display from './components/Display'
 import Header from './components/Header'
 import Button from './components/Button'
 import Keyboard from './components/Keyboard'
+import {themeColors} from './components/themeColors'
 
 export const ThemeSelectorContext = React.createContext({
   themeName:'dark'
 })
 
 function App() {
-  
   const [theme, setTheme ] = React.useState('dark')
-  const switchTheme = (newTheme) => setTheme(newTheme)
+  const [input, setInput ] = React.useState([])
+  const [previousInput, setPreviousInput] = React.useState(null)
+  
+  React.useEffect(()=>{
+    setColorScheme(theme)
+  },[theme])
 
+  React.useEffect(()=>{
+    if(input.length){
+      setPreviousInput(input[input.length-1])
+    }else{
+      setPreviousInput(null)
+    }
+  },[input])
+  
+  function setColorScheme(colorScheme){
+    for(const key in themeColors[colorScheme]){
+      document.documentElement.style.setProperty(key, themeColors[colorScheme][key]);
+    }
+  }
+  
+function removeLastInput(){
+  if(input.length){
+    setInput(input.filter((el,i)=> input.length-1 !==i && el ))
+  }
+}
+function replaceLastInput(value){
+  if(input.length){
+    setInput(input.map((el,i)=> input.length-1 !== i ? el: value ))
+  }
+}
 
-
-  console.log(theme)
+  // const switchTheme = (newTheme) => setTheme(newTheme)
+  // console.clear()
+  console.log(input)
+  // console.log('ostatnio ',previousInput)
 
   function handleClick(e){
-    console.log(e.target.value)
-    document.documentElement.style.setProperty('--main-background-color', '#334');
+    const value = e.target.value
+    if(e.target.value){
+      switch(value){
+        case 'RESET':
+          setInput([])
+          break;
+        case 'DEL':
+          removeLastInput()
+          break;
+        case '=':
+          calculateResult()
+          break;
+        default:
+          setCharToInput(value)
+      }
+      setPreviousInput(value)
+    }
+  }
+
+  /*
+    jesli 
+
+  */
+
+  function concatNumbers(){
+
+    // setInput( input.reduce((acc, curr, i)=>{
+    //   if(isNaN(curr)){
+        
+    //   }
+    // }, []))
+
+    // console.log(input.join(''))
+    
+    // setInput(input.join(''))
+  }
+
+  function calculateResult(){
+    let result = 0;
+    const inputNumbers =[]
+    
+    concatNumbers()
+  }
+
+  function wasAlreadyDot(){
+    for(let i=input.length-1; i>=0; i--){
+      if(input[i]==='.')
+          return true;
+      if(isNaN(input[i]))
+        return false
+    }
+  }
+
+  function setCharToInput(value){
+    // add number to the end
+    if(!isNaN(value)){
+      !input[0] ? setInput([value]) : setInput(prev=> [...prev, value])
+      return
+    }
+    // add minus
+    if(value === '-'){
+      if( previousInput==='-'){ //skip if previous was minus
+        return
+      }
+      if(previousInput==='+'){ // replace plus
+        replaceLastInput(value)
+        return
+      }
+      if(previousInput==='.'){
+        if(input[input.length-2]==='-'){ //remove dot
+          removeLastInput()
+        }else{ //replace dot
+          replaceLastInput('-')
+        }
+        return
+      }
+      setInput(prev=> [...prev, value])
+    }
+    //add dot if wasn't earlier
+    if(value === '.'){
+      if(!wasAlreadyDot()){
+        setInput(prev=> [...prev, value])
+      }
+      return
+    }
+    //add + or * or /
+    if(value==='+' || value==='x' || value==='/'){
+      if(previousInput===value)
+      return
+      if(previousInput==='+' || previousInput==='-' || 
+         previousInput==='/' || previousInput==='x' || 
+         previousInput==='.'){
+          replaceLastInput(value)
+      }else{
+        setInput(prev=> [...prev, value])
+      }
+    }
+
+
+    //TODO trzeba dodac mozliwosc dodania minusa i kropki
+    // if(isNaN(value) && isNaN(input[input.length-1])){
+    //   setInput(input.map((el,i)=> input.length-1 === i? value : el ))
+    // }else{
+    //   !input[0] ? setInput(value) : setInput(prev=> [...prev, value])
+    // }
   }
 
   return (
@@ -27,7 +161,7 @@ function App() {
       <main className='main-container'>
         <Header />
 
-        <Display result={theme}/>
+        <Display result={input}/>
         <Keyboard onClick={handleClick}>
           <Button>7</Button>
           <Button>8</Button>

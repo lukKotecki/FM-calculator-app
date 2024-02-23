@@ -9,8 +9,8 @@ export default function Header(){
         <header>
             <h1>calc</h1>
 
-            <div>
-                Theme
+            <div className='theme'>
+                <span>THEME</span>
                 <ThreeStateToggle />
             </div>
 

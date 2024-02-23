@@ -42,8 +42,11 @@ export default function ThreeStateToggle(){
         <div className='toggle'>
                     
             <div className="tri-state-toggle">
+                <span>1</span>
                 <input ref={dark} onClick={handleClick} className="toggle" type="radio" name="toggle" id="dark" />
+                <span>2</span>
                 <input ref={light} onClick={handleClick} className="toggle" type="radio" name="toggle" id="light" />
+                <span>3</span>
                 <input ref={violet} onClick={handleClick} className="toggle" type="radio" name="toggle" id="violet" />
             </div>
 
