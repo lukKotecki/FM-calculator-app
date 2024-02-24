@@ -64,7 +64,7 @@ function replaceLastInput(value){
         default:
           setCharToInput(value)
       }
-      setPreviousInput(value)
+      // setPreviousInput(value)
     }
   }
 
@@ -74,16 +74,28 @@ function replaceLastInput(value){
   */
 
   function concatNumbers(){
+    const array =[]
+    let numberOfNumbers = 0
+    for(let i=0; i< input.length; i++){
+      if(!isNaN(input[i]) || input[i]==='.' ){
+        if(array[numberOfNumbers]){
+          array[numberOfNumbers] = array[numberOfNumbers]+input[i]
+        }else{
+          array[numberOfNumbers] = input[i]
+        }
+      }else{
+        if(i===0){
+          numberOfNumbers +=1
+        }else{
+          numberOfNumbers +=2
+        }
+        array.push(input[i])
+      }
 
-    // setInput( input.reduce((acc, curr, i)=>{
-    //   if(isNaN(curr)){
-        
-    //   }
-    // }, []))
+    }
 
-    // console.log(input.join(''))
+    console.log(array)
     
-    // setInput(input.join(''))
   }
 
   function calculateResult(){
@@ -102,6 +114,7 @@ function replaceLastInput(value){
     }
   }
 
+  // TODO -.x-
   function setCharToInput(value){
     // add number to the end
     if(!isNaN(value)){
@@ -113,7 +126,7 @@ function replaceLastInput(value){
       if( previousInput==='-'){ //skip if previous was minus
         return
       }
-      if(previousInput==='+'){ // replace plus
+      if(previousInput==='+' || input.length === 1 && isNaN(input[0])){ // replace plus
         replaceLastInput(value)
         return
       }
@@ -136,7 +149,9 @@ function replaceLastInput(value){
     }
     //add + or * or /
     if(value==='+' || value==='x' || value==='/'){
-      if(previousInput===value)
+      if(previousInput===value || !previousInput || 
+        
+        isNaN(input[0] && isNaN(input[1])) )
       return
       if(previousInput==='+' || previousInput==='-' || 
          previousInput==='/' || previousInput==='x' || 
