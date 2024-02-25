@@ -114,14 +114,13 @@ function replaceLastInput(value){
     }
   }
 
-  // TODO -.x-
   function setCharToInput(value){
     // add number to the end
     if(!isNaN(value)){
       !input[0] ? setInput([value]) : setInput(prev=> [...prev, value])
       return
     }
-    // add minus
+    //add minus
     if(value === '-'){
       if( previousInput==='-'){ //skip if previous was minus
         return
@@ -150,13 +149,13 @@ function replaceLastInput(value){
     //add + or * or /
     if(value==='+' || value==='x' || value==='/'){
       if(previousInput===value || !previousInput || 
-        
-        isNaN(input[0] && isNaN(input[1])) )
+        previousInput ==='.'||
+        isNaN(input[0] && isNaN(input[1])) ||
+        isNaN(previousInput) && isNaN(input[input.length-2]) && input.length>=2 ||
+        input.length===1 && previousInput === '-' )
       return
-      if(previousInput==='+' || previousInput==='-' || 
-         previousInput==='/' || previousInput==='x' || 
-         previousInput==='.'){
-          replaceLastInput(value)
+      if(isNaN(previousInput) ){
+        replaceLastInput(value)
       }else{
         setInput(prev=> [...prev, value])
       }
