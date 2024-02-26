@@ -9,11 +9,16 @@ export const ThemeSelectorContext = React.createContext({
   themeName:'dark'
 })
 
+// Basic idea of calculator
+// Each user click is stored in 'input' array. 
+// User should be able to dynamically change his input by clicking different operation or removing last sign by clicking 'DEL' button. 
+// After clicking equality button 'input' array is calculated with order of operations.
+// The code requires refactoring and some errors may occur due to its coarseness
+
 function App() {
   const [theme, setTheme ] = React.useState('dark')
   const [input, setInput ] = React.useState([])
   const [previousInput, setPreviousInput] = React.useState(null)
-  const [concated, setConcated] = React.useState([])
   
   React.useEffect(()=>{
     setColorScheme(theme)
@@ -44,11 +49,6 @@ function replaceLastInput(value){
   }
 }
 
-  // const switchTheme = (newTheme) => setTheme(newTheme)
-  // console.clear()
-  // console.log(input)
-  // console.log('ostatnio ',previousInput)
-
   function handleClick(e){
     const value = e.target.value
     if(e.target.value){
@@ -60,55 +60,47 @@ function replaceLastInput(value){
           removeLastInput()
           break;
         case '=':
-          calculateResult()
+          calculateResult(concatNumbers())
           break;
         default:
           setCharToInput(value)
       }
-      // setPreviousInput(value)
     }
   }
-
   
-  function multiplyAndDivide(concatedNumbers){
-    const arr = [...concatedNumbers]
-    const array = []
-    let previousNumber = Number(arr[0])
-    let currentCalculationResult = 0
-    for (let i =0, j=0; i< arr.length; i++){
-      if(arr[i] === 'x'){
-        arr[i+1] = arr[i-1]* arr[i+1]
-        arr[i-1]= null
-        arr[i]=null
+  function calculateResult(concatedNumbers){
+    const firstArray = [...concatedNumbers]
+    const secondArray = []
+    // perform multiplying and dividing onto firstArray
+    for (let i =0, j=0; i< firstArray.length; i++){
+      if(firstArray[i] === 'x'){
+        firstArray[i+1] = firstArray[i-1]* firstArray[i+1]
+        firstArray[i-1]= null
+        firstArray[i]=null
       }
-      if(arr[i] === '/'){
-        arr[i+1] = arr[i-1]/ arr[i+1]
-        arr[i-1]= null
-        arr[i]=null
-      }
-    }
-    arr.forEach(el=> el && array.push(el))
-    
-    for (let i =0; i< array.length; i++){
-      if(array[i] === '+'){
-        array[i+1] = Number(array[i-1]) + Number(array[i+1])
-        array[i-1]= null
-        array[i]=null
-      }
-      if(array[i] === '-'){
-        array[i+1] = array[i-1]- array[i+1]
-        array[i-1]= null
-        array[i]=null
+      if(firstArray[i] === '/'){
+        firstArray[i+1] = firstArray[i-1]/ firstArray[i+1]
+        firstArray[i-1]= null
+        firstArray[i]=null
       }
     }
-
-
-    setInput(array[array.length-1].toString())
-
-    console.log(input)
-    console.log(arr)
-    console.log(array)
-    console.log(array[array.length-1])
+    // initialize secondArray without null fields
+    firstArray.forEach(el=> el && secondArray.push(el))
+    // perform adding and substracting onto secondArray
+    for (let i =0; i< secondArray.length; i++){
+      if(secondArray[i] === '+'){
+        secondArray[i+1] = Number(secondArray[i-1]) + Number(secondArray[i+1])
+        secondArray[i-1]= null
+        secondArray[i]=null
+      }
+      if(secondArray[i] === '-'){
+        secondArray[i+1] = secondArray[i-1]- secondArray[i+1]
+        secondArray[i-1]= null
+        secondArray[i]=null
+      }
+    }
+    //setting up the resoult into the display also for further calculations
+    setInput([secondArray[secondArray.length-1].toString()])
   }
 
   function concatNumbers(){
@@ -129,17 +121,8 @@ function replaceLastInput(value){
         }
         array.push(input[i])
       }
-
     }
     return array
-  }
-
-  function calculateResult(){
-    let result = 0;
-    const inputNumbers =[]
-    
-    
-    multiplyAndDivide(concatNumbers())
   }
 
   function wasAlreadyDot(){
@@ -183,7 +166,7 @@ function replaceLastInput(value){
       }
       return
     }
-    //add + or * or /
+    //add + or x or /
     if(value==='+' || value==='x' || value==='/'){
       if(previousInput===value || !previousInput || 
         previousInput ==='.'||
@@ -197,14 +180,6 @@ function replaceLastInput(value){
         setInput(prev=> [...prev, value])
       }
     }
-
-
-    //TODO trzeba dodac mozliwosc dodania minusa i kropki
-    // if(isNaN(value) && isNaN(input[input.length-1])){
-    //   setInput(input.map((el,i)=> input.length-1 === i? value : el ))
-    // }else{
-    //   !input[0] ? setInput(value) : setInput(prev=> [...prev, value])
-    // }
   }
 
   return (
@@ -232,7 +207,6 @@ function replaceLastInput(value){
           <Button>x</Button>
           <Button className='reset'>RESET</Button>
           <Button className='equal'>=</Button>
-
         </Keyboard>
       </main>
     </ThemeSelectorContext.Provider>
