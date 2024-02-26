@@ -13,6 +13,7 @@ function App() {
   const [theme, setTheme ] = React.useState('dark')
   const [input, setInput ] = React.useState([])
   const [previousInput, setPreviousInput] = React.useState(null)
+  const [concated, setConcated] = React.useState([])
   
   React.useEffect(()=>{
     setColorScheme(theme)
@@ -45,7 +46,7 @@ function replaceLastInput(value){
 
   // const switchTheme = (newTheme) => setTheme(newTheme)
   // console.clear()
-  console.log(input)
+  // console.log(input)
   // console.log('ostatnio ',previousInput)
 
   function handleClick(e){
@@ -68,16 +69,53 @@ function replaceLastInput(value){
     }
   }
 
-  /*
-    jesli 
+  
+  function multiplyAndDivide(concatedNumbers){
+    const arr = [...concatedNumbers]
+    const array = []
+    let previousNumber = Number(arr[0])
+    let currentCalculationResult = 0
+    for (let i =0, j=0; i< arr.length; i++){
+      if(arr[i] === 'x'){
+        arr[i+1] = arr[i-1]* arr[i+1]
+        arr[i-1]= null
+        arr[i]=null
+      }
+      if(arr[i] === '/'){
+        arr[i+1] = arr[i-1]/ arr[i+1]
+        arr[i-1]= null
+        arr[i]=null
+      }
+    }
+    arr.forEach(el=> el && array.push(el))
+    
+    for (let i =0; i< array.length; i++){
+      if(array[i] === '+'){
+        array[i+1] = Number(array[i-1]) + Number(array[i+1])
+        array[i-1]= null
+        array[i]=null
+      }
+      if(array[i] === '-'){
+        array[i+1] = array[i-1]- array[i+1]
+        array[i-1]= null
+        array[i]=null
+      }
+    }
 
-  */
+
+    setInput(array[array.length-1].toString())
+
+    console.log(input)
+    console.log(arr)
+    console.log(array)
+    console.log(array[array.length-1])
+  }
 
   function concatNumbers(){
     const array =[]
     let numberOfNumbers = 0
     for(let i=0; i< input.length; i++){
-      if(!isNaN(input[i]) || input[i]==='.' ){
+      if(!isNaN(input[i]) || input[i]==='.' || input[i]==='-' && isNaN(input[i-1]) ){
         if(array[numberOfNumbers]){
           array[numberOfNumbers] = array[numberOfNumbers]+input[i]
         }else{
@@ -93,16 +131,15 @@ function replaceLastInput(value){
       }
 
     }
-
-    console.log(array)
-    
+    return array
   }
 
   function calculateResult(){
     let result = 0;
     const inputNumbers =[]
     
-    concatNumbers()
+    
+    multiplyAndDivide(concatNumbers())
   }
 
   function wasAlreadyDot(){
