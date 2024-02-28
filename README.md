@@ -1,8 +1,1 @@
-# React + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Some similar features are handled differently because I wanted to practice some skills. The most challenging part was to provide order of mathematical operations, for ex: 2+2*2=6 instead of 8. I handled this with an array of input because I also wanted to implement undo operation with 'DEL' button. It's clunky and heavy code but it works.
