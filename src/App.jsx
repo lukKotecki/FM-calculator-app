@@ -2,7 +2,7 @@ import React from 'react'
 import Display from './components/Display'
 import Header from './components/Header'
 import Button from './components/Button'
-import Keyboard from './components/Keyboard'
+import Buttons from './assets/Buttons'
 import {themeColors} from './components/themeColors'
 
 export const ThemeSelectorContext = React.createContext({
@@ -38,30 +38,26 @@ function App() {
     }
   }
   
-function removeLastInput(){
-  if(input.length){
-    setInput(input.filter((el,i)=> input.length-1 !==i && el ))
+  function removeLastInput() {
+    if (!input.length) return
+    setInput(input.filter((el, i) => input.length - 1 !== i && el))
   }
-}
-function replaceLastInput(value){
-  if(input.length){
-    setInput(input.map((el,i)=> input.length-1 !== i ? el: value ))
+
+  function replaceLastInput(value) {
+    if (!input.length) return
+    setInput(input.map((el, i) => (input.length - 1 !== i ? el : value)))
   }
-}
 
   function handleClick(e){
     const value = e.target.value
     if(e.target.value){
       switch(value){
         case 'RESET':
-          setInput([])
-          break;
+          return setInput([])
         case 'DEL':
-          removeLastInput()
-          break;
+          return removeLastInput()
         case '=':
-          calculateResult(concatNumbers())
-          break;
+          return calculateResult(concatNumbers())
         default:
           setCharToInput(value)
       }
@@ -70,7 +66,6 @@ function replaceLastInput(value){
   
   function calculateResult(concatedNumbers){
     const firstArray = [...concatedNumbers]
-    const secondArray = []
     // perform multiplying and dividing onto firstArray
     for (let i =0, j=0; i< firstArray.length; i++){
       if(firstArray[i] === 'x'){
@@ -85,6 +80,7 @@ function replaceLastInput(value){
       }
     }
     // initialize secondArray without null fields
+    const secondArray = []
     firstArray.forEach(el=> el && secondArray.push(el))
     // perform adding and substracting onto secondArray
     for (let i =0; i< secondArray.length; i++){
@@ -168,46 +164,38 @@ function replaceLastInput(value){
     }
     //add + or x or /
     if(value==='+' || value==='x' || value==='/'){
-      if(previousInput===value || !previousInput || 
-        previousInput ==='.'||
-        isNaN(input[0] && isNaN(input[1])) ||
-        isNaN(previousInput) && isNaN(input[input.length-2]) && input.length>=2 ||
-        input.length===1 && previousInput === '-' )
-      return
-      if(isNaN(previousInput) ){
-        replaceLastInput(value)
-      }else{
-        setInput(prev=> [...prev, value])
+      const wasAlreadyThisSign = previousInput===value
+      const isTheFirstSignInInput = !previousInput
+      const previousIsDot = previousInput ==='.'
+      const minusDotOnBegining = isNaN(input[0] && isNaN(input[1])) 
+      const minusDotLastInput = isNaN(previousInput) && isNaN(input[input.length-2]) && input.length>=2
+      const firstIsMinus = input.length===1 && previousInput === '-'
+      if( wasAlreadyThisSign || isTheFirstSignInInput || 
+        previousIsDot|| minusDotOnBegining || minusDotLastInput|| firstIsMinus )
+        return
+        if(isNaN(previousInput) ){
+          replaceLastInput(value)
+        }else{
+          setInput(prev=> [...prev, value])
+        }
       }
     }
-  }
-
+    
+    
   return (
     <ThemeSelectorContext.Provider value={{themeName:'dark', setTheme}}>
       <main className='main-container'>
         <Header />
 
         <Display result={input}/>
-        <Keyboard onClick={handleClick}>
-          <Button>7</Button>
-          <Button>8</Button>
-          <Button>9</Button>
-          <Button className='del'>DEL</Button>
-          <Button>4</Button>
-          <Button>5</Button>
-          <Button>6</Button>
-          <Button>+</Button>
-          <Button>1</Button>
-          <Button>2</Button>
-          <Button>3</Button>
-          <Button>-</Button>
-          <Button>.</Button>
-          <Button>0</Button>
-          <Button>/</Button>
-          <Button>x</Button>
-          <Button className='reset'>RESET</Button>
-          <Button className='equal'>=</Button>
-        </Keyboard>
+        <div  className='kayboard' >
+        {Buttons.map((button, index) => (
+            <Button className={button.class ? button.class : ''} 
+                    onClick={handleClick} 
+                    key={index} 
+                    name={button.name}/>
+          ))}
+        </div>
       </main>
     </ThemeSelectorContext.Provider>
   )
