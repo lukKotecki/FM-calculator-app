@@ -1,16 +1,15 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useContext } from 'react'
 import './ThreeStateToggle.css'
 import { ThemeSelectorContext } from '../../App'
+import Input from './Input'
 
 export default function ThreeStateToggle(){
     const {themeName, setTheme} = useContext(ThemeSelectorContext)
-    const [style, setStyle ] = React.useState('dark')
-
+    const [style, setStyle ] = React.useState(themeName)
+    
     const dark = React.useRef(null)
     const light = React.useRef(null)
     const violet = React.useRef(null)
-
-    // console.log(themeName)
 
     React.useEffect(()=> {
         dark.current.style.opacity = 0
@@ -36,22 +35,26 @@ export default function ThreeStateToggle(){
     function handleClick(e){
         setStyle(e.target.id)
     }
-
+    const themeSwitchInputs = [
+        { number: 1, id: 'dark', ref: dark },
+        { number: 2, id: 'light', ref: light },
+        { number: 3, id: 'violet', ref: violet },
+      ]
 
     return(
         <div className='toggle'>
                     
             <div className="tri-state-toggle">
-                <span>1</span>
-                <input ref={dark} onClick={handleClick} className="toggle" type="radio" name="toggle" id="dark" />
-                <span>2</span>
-                <input ref={light} onClick={handleClick} className="toggle" type="radio" name="toggle" id="light" />
-                <span>3</span>
-                <input ref={violet} onClick={handleClick} className="toggle" type="radio" name="toggle" id="violet" />
+                {themeSwitchInputs.map((input) => (
+                <Input
+                    number={input.number}
+                    id={input.id}
+                    handleClick={handleClick}
+                    ref={input.ref}
+                    key={input.number}
+                />
+                ))}
             </div>
-
-
-
         </div>
     )
 }

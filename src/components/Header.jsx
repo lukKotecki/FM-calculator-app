@@ -1,9 +1,7 @@
 import React from 'react'
 import ThreeStateToggle from './ThreeStateToggle/ThreeStateToggle'
 
-
 export default function Header(){
-
 
     return(
         <header>
@@ -13,7 +11,6 @@ export default function Header(){
                 <span>THEME</span>
                 <ThreeStateToggle />
             </div>
-
 
         </header>
     )
