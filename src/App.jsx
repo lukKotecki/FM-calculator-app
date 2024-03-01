@@ -83,8 +83,7 @@ function App() {
       }
     }
     // initialize secondArray without null fields
-    const secondArray = [];
-    firstArray.forEach((el) => el && secondArray.push(el));
+    const secondArray = firstArray.filter((el) => el && el)
     // perform adding and substracting onto secondArray
     for (let i = 0; i < secondArray.length; i++) {
       if (secondArray[i] === "+") {
