@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 
-const Input = forwardRef(function Input({ number, id, handleClick }, ref) {
+const Input = forwardRef(({ number, id, handleClick }, ref) => {
   return (
     <>
       <span>{number}</span>
